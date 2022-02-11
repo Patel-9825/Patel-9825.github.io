@@ -94,7 +94,7 @@
      */
     function AddContact(fullName, contactNumber, emailAddress)
     {
-        let contact = new Contact(fullName, contactNumber, emailAddress);
+        let contact = new core.Contact(fullName, contactNumber, emailAddress);
         if(contact.serialize())
         {
             let key = contact.FullName.substring(0, 1) + Date.now();
@@ -103,9 +103,45 @@
         }
     }
 
+    /**
+     * This method validates an input text field in the form and displays
+     * an error in the message area in the field
+     *
+     * @param {string} input_field_ID
+     * @param {RegExp} regular_expression
+     * @param {string} error_message
+     */
+    function ValidateField(input_field_ID, regular_expression, error_message)
+    {
+        let messageArea = $("#messageArea").hide();
+
+        $("#" + input_field_ID).on("blur", function()
+        {
+            let input_text_field = $(this).val(); 
+            if(!regular_expression.test(input_text_field))
+            {
+                $(this).trigger("focus").trigger("select");
+                messageArea.addClass("alert alert-danger").text(error_message).show();
+            }
+            else
+            {
+                messageArea.removeAttr("class").hide();
+            }
+        });
+    }
+
+    function ContactFormValidation()
+    {
+        ValidateField("fullName", /^([A-Z][a-z]{1,3}.?\s)?([A-Z][a-z]{1,25})+(\s|,|-)([A-Z][a-z]{1,25})+(\s|,|-)*$/, "Please enter a valid Full Name. This include at least a capitalized first name followed by Capitalized Last Name.");
+        ValidateField("contactNumber", /^(\+\d{1,3}[\s-.])?\(?\d{3}\)?[\s-.]?\d{3}[\s-.]?\d{4}$/, "Please enter a valid Contact Number. Example: 999-999-9999.");
+        ValidateField("emailAddress", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,10}$/, "Please enter a valid Email Address.");
+    }
+
     function DisplayContactPage()
     {
         console.log("Contact Us Page");
+
+        ContactFormValidation();
 
         let sendButton = document.getElementById("sendButton");
         let subscribeCheckBox = document.getElementById("subscribeCheckBox");
@@ -144,7 +180,7 @@
             {
                 let contactData = localStorage.getItem(key); // retrieve contact data from localstorage
 
-                let contact = new Contact(); // creates an empty Contact object
+                let contact = new core.Contact(); // creates an empty Contact object
                 contact.deserialize(contactData);
 
                 data += `<tr>
@@ -190,6 +226,8 @@
     {
         console.log("Edit Page");
 
+        ContactFormValidation();
+
         let page = location.hash.substring(1);
         
         switch (page) 
@@ -221,7 +259,7 @@
             default:
                 {
                     // get the cointact info from localStorage
-                    let contact = new Contact();
+                    let contact = new core.Contact();
                     contact.deserialize(localStorage.getItem(page));
 
                     // display the contact info in the edit form
@@ -256,13 +294,22 @@
         }
     }
 
+    function DisplayLoginPage()
+    {
+        console.log("Login Page");
+    }
+
+    funciton DisplayRegisterPage()
+    {
+        console.log("Register Page");
+    }
+
     // named function
     function Start()
     {
         console.log("App Started!!");
 
-        switch (document.title) 
-        {
+        switch (document.title) {
           case "Home":
             DisplayHomePage();
             break;
@@ -284,7 +331,12 @@
           case "Edit":
             DisplayEditPage();
             break;
-        
+          case "Login":
+            DisplayLoginPage();
+            break;
+          case "Register":
+            DisplayRegisterPage();
+            break;
         }
 
         

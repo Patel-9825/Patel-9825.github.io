@@ -1,7 +1,7 @@
 {
-  "name": "ice-4",
+  "name": "ice-5",
   "version": "1.0.0",
-  "description": "ICE 4 for WEBD6201",
+  "description": "ICE 5 for WEBD6201",
   "main": "index.js",
   "author": "Dhruv Patel",
   "license": "MIT",
@@ -11,5 +11,8 @@
     "bootstrap": "^5.1.3",
     "jquery": "^3.6.0"
   },
-  "repository": "https://github.com/Patel-9825/WEBD6201-W2022-ICEs.git"
+  "repository": "https://github.com/Patel-9825/WEBD6201-W2022-ICEs.git",
+  "devDependencies": {
+    "@types/jquery": "^3.5.13"
+  }
 }
